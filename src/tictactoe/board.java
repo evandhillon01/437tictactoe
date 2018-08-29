@@ -69,7 +69,5 @@ public class board {
 //		while(true){
 //			b.drawBoard();
 //		}
-	}
-
-	
+	}	
 }
