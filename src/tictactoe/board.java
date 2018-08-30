@@ -36,7 +36,9 @@ public class board {
 	public boolean isFull(){
 		return (this.turns >= 9);
 	}
-	
+	public void setPieces(piece[][] pieces){
+		this.pieces = pieces;
+	}
 	
 	//private methods
 	private void drawBoard(){
