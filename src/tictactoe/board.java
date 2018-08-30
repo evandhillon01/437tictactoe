@@ -18,13 +18,27 @@ public class board {
 		StdDraw.setScale(MIN, MAX);
 		this.drawBoard();
 	}
-
 	public void turn(int player){
 		this.addPiece(player);
 		StdDraw.clear();
 		this.drawBoard();
 		this.drawPieces();
 	}
+	public void win(int player){
+		StdDraw.clear();
+		for(int i=0;i<=360;i=i+15){
+			StdDraw.clear();
+			StdDraw.setPenColor(genRandomColor());
+			StdDraw.text(.5, .5, "Player"+player+" Wins!", i);
+			StdDraw.show(50);
+		}
+	}
+	public boolean isFull(){
+		return (this.turns >= 9);
+	}
+	
+	
+	//private methods
 	private void drawBoard(){
 		double interval = 1.0/(size);
 		double x1=0,x2=1;
@@ -44,18 +58,6 @@ public class board {
 				}
 			}
 		}
-	}
-	public void win(int player){
-		StdDraw.clear();
-		for(int i=0;i<=360;i=i+15){
-			StdDraw.clear();
-			StdDraw.setPenColor(genRandomColor());
-			StdDraw.text(.5, .5, "Player"+player+" Wins!", i);
-			StdDraw.show(50);
-		}
-	}
-	public boolean isFull(){
-		return (this.turns >= 9);
 	}
 	private void addPiece(int player){
 		double x=0,y=0;
@@ -78,8 +80,6 @@ public class board {
 			}
 		}
 	}
-
-
 	private boolean isValidMove(int row, int col){
 		if (pieces[0].length <= col || pieces.length <=row) return false;
 		else return pieces[row][col] == null;
@@ -96,11 +96,11 @@ public class board {
 		double interval = 1.0/(2*size);
 		return (interval * (index*2+1)); //get center of given row/col
 	}
-	public static void main(String[] args){
-		// for testing purposes
-		board b = new board(3);
-		b.turn(2);
-		b.turn(1);
-		b.turn(3);
-	}	
+//	public static void main(String[] args){
+//		//for testing purposes
+//		board b = new board(3);
+//		b.turn(2);
+//		b.turn(1);
+//		b.turn(3);
+//	}	
 }

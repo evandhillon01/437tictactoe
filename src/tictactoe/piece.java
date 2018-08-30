@@ -18,11 +18,12 @@ public class piece {
 			StdDraw.line(x-size, y+size, x+size, y-size);
 			break;
 		case 2:
+			// draw O
 			StdDraw.setPenColor(Color.BLUE);
 			StdDraw.circle(x, y, size);
 			break;
 		case 3:
-			//draw Triangle
+			//draw square
 			StdDraw.setPenColor(Color.GREEN);
 			StdDraw.square(x, y, size);
 			break;
