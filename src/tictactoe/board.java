@@ -11,17 +11,21 @@ public class board {
 		MIN = 0;
 		MAX = 1;
 		turns = 0;
+		this.setup();
 	}
 	public void setup(){
 		StdDraw.setPenColor(Color.BLACK);
 		StdDraw.setScale(MIN, MAX);
+		this.drawBoard();
 	}
-	//	public void draw(){
-	//		StdDraw.clear();
-	//		drawBoard();
-	//		drawPieces();
-	//	}
-	public void drawBoard(){
+
+	public void turn(int player){
+		this.addPiece(player);
+		StdDraw.clear();
+		this.drawBoard();
+		this.drawPieces();
+	}
+	private void drawBoard(){
 		double interval = 1.0/(size);
 		double x1=0,x2=1;
 		double y1=0, y2=0;
@@ -35,7 +39,9 @@ public class board {
 	private void drawPieces(){
 		for(int row = 0; row<size;row++){
 			for(int col=0;col<size;col++){
-				pieces[row][col].draw(row,col);
+				if(pieces[row][col]!= null){
+					pieces[row][col].draw(indexToCoordinate(col),indexToCoordinate(row));
+				}
 			}
 		}
 	}
@@ -48,13 +54,10 @@ public class board {
 			StdDraw.show(50);
 		}
 	}
-	private static Color genRandomColor() {
-		return new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
-	}
 	public boolean isFull(){
 		return (this.turns >= 9);
 	}
-	public void addPiece(int player){
+	private void addPiece(int player){
 		double x=0,y=0;
 		int row=-1,col=-1;
 		while(true){
@@ -75,6 +78,8 @@ public class board {
 			}
 		}
 	}
+
+
 	private boolean isValidMove(int row, int col){
 		if (pieces[0].length <= col || pieces.length <=row) return false;
 		else return pieces[row][col] == null;
@@ -84,17 +89,18 @@ public class board {
 		int col = (int)(x / (1.0/size));
 		return new int[] {row,col};
 	}
+	private static Color genRandomColor() {
+		return new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+	}
+	public double indexToCoordinate(int index){
+		double interval = 1.0/(2*size);
+		return (interval * (index*2+1)); //get center of given row/col
+	}
 	public static void main(String[] args){
 		// for testing purposes
 		board b = new board(3);
-		b.drawBoard();
-		b.addPiece(1);
-		for(piece[] row : b.pieces){
-			for(piece p : row){
-				System.out.print((p == null)? "-":p.player);
-			}
-		}
-		b.win(1);
-		
+		b.turn(2);
+		b.turn(1);
+		b.turn(3);
 	}	
 }
