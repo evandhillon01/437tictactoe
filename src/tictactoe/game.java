@@ -1,7 +1,15 @@
 package tictactoe;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 //contains all the win checks / methods 
 
 public class game {
@@ -30,26 +38,53 @@ public class game {
 		return; 
 	}
 
-
-//commented to get basic functioning first.
-//	public void saveGame(board myBoard) throws IOException {
-//		String fileName = "savedgames.txt";
-//		String fileStr = "";
-//		for(int i = 0; i < myBoard.pieces[0].length; i++) {
-//			for(int j = 0; j < myBoard.pieces.length; j++) {
-//				String numStr = myBoard.pieces[i][j].player + ",";
-//				fileStr = fileStr + numStr;
-//			}
-//			fileStr = fileStr + "\n";
-//		}
-//		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-//		writer.append(fileStr);	     
-//		writer.close();
-//	}
+	public static void saveGame(board myBoard) throws IOException {
+		String fileName = "savedgames.txt";
+		String fileStr = "";
+		for(int i = 0; i < myBoard.boardPieces[0].length; i++) {
+			for(int j = 0; j < myBoard.boardPieces.length; j++) {
+				if(myBoard.boardPieces[i][j] != null){
+					String numStr = myBoard.boardPieces[i][j].player + ",";
+					fileStr = fileStr + numStr;
+				}
+				else {
+					fileStr = fileStr + "x,";
+				}
+			}
+			fileStr = fileStr + "\n";
+		}
+		PrintWriter clear = new PrintWriter(fileName);
+		clear.print("");
+		clear.close();
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+		writer.write(fileStr);	     
+		writer.close();
+	}
 	
-//	public void loadGame() {
-//		
-//	}
+	public static void loadGame(board myBoard) throws IOException {
+	    File file = new File("savedgames.txt");
+	    BufferedReader reader = new BufferedReader(new FileReader(file));
+	    String line;
+	    int count = 0;
+	    while ((line = reader.readLine()) != null) {
+	        String[] values = line.split(",");
+	        for(int i = 0; i < values.length; i++) {
+	        	if(values[i].equals("x")) {
+	        		myBoard.boardPieces[count][i] = null;
+	        	}
+	        	else if(values[i].equals("1")) {
+	        		myBoard.boardPieces[count][i] = new piece(1);
+	        	}
+	        	else if(values[i].equals("2")) {
+	        		myBoard.boardPieces[count][i] = new piece(2);
+	        	}
+	        	else if(values[i].equals("3")) {
+	        		myBoard.boardPieces[count][i] = new piece(3);
+	        	}
+	        }
+	        count++;
+	    }
+	}
 	
 	// FIX: Logic needs to be cleaned. In more modular way, check for NULL then check for win.
 	public static boolean checkWin(board myBoard) {
@@ -91,18 +126,20 @@ public class game {
 						return true;
 					}
 				}
-				//edited to get row/col checking first.
-				//diagonal checkss
-//				if(i != 0 && i != 3 && j != 0 && j != 3) {
-//					//diagonal checks \ direction
-//					if(myBoard.boardPieces[i-1][j+1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i+1][j-1].player) {
-//						return true;
-//					}
-//					//diagonal checks / direction
-//					if(myBoard.boardPieces[i-1][j-1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i+1][j+1].player) {
-//						return true;
-//					}
-//				}	
+				if(i != 0 && i != 3 && j != 0 && j != 3) {
+					//diagonal checks \ direction
+					if(myBoard.boardPieces[i-1][j+1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i+1][j-1] != null) {
+						if(myBoard.boardPieces[i-1][j+1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i+1][j-1].player) {
+							return true;
+						}
+					}
+					//diagonal checks / direction
+					if(myBoard.boardPieces[i-1][j-1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i+1][j+1] != null) {
+						if(myBoard.boardPieces[i-1][j-1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i+1][j+1].player) {
+							return true;
+						}
+					}
+				}	
 			}
 		}
 		return false;
@@ -119,8 +156,16 @@ public class game {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		board myBoard = new board(4);
 		play(myBoard);
-		}
+//		myBoard.boardPieces[2][3] = new piece(2);
+//		myBoard.boardPieces[1][3] = new piece(3);
+//		myBoard.boardPieces[3][0] = new piece(1);
+//		saveGame(myBoard);
+//		loadGame(myBoard);
+//		System.out.println(myBoard.boardPieces[2][3].player);
+//		System.out.println(myBoard.boardPieces[1][3].player);
+//		System.out.println(myBoard.boardPieces[3][0].player);
 	}
+}
