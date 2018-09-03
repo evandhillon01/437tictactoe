@@ -1,6 +1,6 @@
 package tictactoe;
 /*************************************************************************
- *  Compilation:  javac StdDraw.java
+ *  Compilation:  java StdDraw.java
  *  Execution:    java StdDraw
  *
  *  Standard drawing library. This class provides a basic capability for
