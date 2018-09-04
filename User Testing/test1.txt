@@ -1,0 +1,11 @@
+User 1:
+
+Initial reaction:
+	was unsure where to click for save vs. load
+	didn't know rules of game with board of size 4
+	didn't see response for when game was saved so was unsure if game saved or not
+	once rules were told verbally test went smoothly
+changes to implement:
+	make it clear where to click on initialization screen
+	give user response on saved game
+	(display rules somewhere?)
