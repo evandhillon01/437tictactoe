@@ -42,7 +42,7 @@ public class board {
 		StdDraw.text(.25, .5, "New Game");
 		StdDraw.text(.75, .5, "Load Game");
 		//wait for click
-		double[] coor = clickOnBoardOrSave();
+		double[] coor = actionOnBoard();
 		StdDraw.clear();
 		//clear and return side of click
 		this.setBoard();
@@ -68,10 +68,14 @@ public class board {
 		}
 	}
 
-	void makeMove(int player) {
+/**
+ * Registers the piece input
+ * @param player the number of the player
+ */
+	public void registerPiece(int player){
 		double x = 0, y = 0;
 		int row ,col;			
-		double[] coor = clickOnBoardOrSave();
+		double[] coor = actionOnBoard();
 		
 		// x is stored in the 0-index and y in the 1-index of returned array
 		x = coor[0];
@@ -80,46 +84,35 @@ public class board {
 		row = coorRowAndCol[0];
 		col = coorRowAndCol[1];
 		
-		addPiece(row,col,player);
-		
+		addPiece(row, col, player);
 	}
 
 /**
- * Adds piece to the board
+ * Adds piece to the board from load game.
+ * @param row row number
+ * @param col column number
  * @param player the number of the player
  */
-	public void addPiece(int row,int col,int player){
-		double centerX = indexToCoordinate(col);
-		double centerY = indexToCoordinate(row);
-		if(isValidMove(row,col)) {
-			piece addedPiece = new piece(player);
-			this.boardPieces[row][col] = addedPiece;
-			addedPiece.draw(centerX, centerY);
+		public void addPiece(int row, int col, int player){
+			double centerX = indexToCoordinate(col);
+			double centerY = indexToCoordinate(row);
+			if(isValidMove(row,col)) {
+				piece addedPiece = new piece(player);
+				this.boardPieces[row][col] = addedPiece;
+				addedPiece.draw(centerX, centerY);
+			}
 		}
-		else {
-			makeMove(player);
-		}
-	}
-	
 
 /**
  * Registers mouse click on board
  * @return array of x coordinate @ 0-index 
  * 		   and y coordinate @ 1-index
  */
-	private double[] clickOnBoardOrSave() {
+	private double[] actionOnBoard() {
 		double x = 0, y = 0;
 		double [] coor = new double [2];
 		while (!StdDraw.mousePressed()){
-			if (StdDraw.isKeyPressed(83)){
-				try{
-					this.saveGame();
-					System.out.println("game saved");
-				}
-				catch(IOException e){
-					System.out.println("Could not save game: Error "+e);
-				}
-			}
+			checkSaveGameAction();
 			StdDraw.pause(100);
 		}
 		while(StdDraw.mousePressed()){
@@ -129,6 +122,23 @@ public class board {
 		coor[0] = x;
 		coor[1] = y;
 		return coor;
+	}
+
+/**
+ * Checks for Save Game ('S' key) input.
+ */
+	private void checkSaveGameAction() {
+		// 83 is the key code for 's' keyboard input.
+		int S_KEYCODE = 83;
+		if (StdDraw.isKeyPressed(S_KEYCODE)){
+			try{
+				this.saveGame();
+				System.out.println("game saved");
+			}
+			catch(IOException e){
+				System.out.println("Could not save game: Error " + e);
+			}
+		}
 	}
 
 /**
@@ -150,8 +160,8 @@ public class board {
 	private void saveGame() throws IOException {
 		String fileName = "savedgames.txt";
 		String fileStr = "";
-		for(int i = 0; i < this.boardPieces[0].length; i++) {
-			for(int j = 0; j < this.boardPieces.length; j++) {
+		for(int i = 0; i < this.boardPieces.length; i++) {
+			for(int j = 0; j < this.boardPieces[i].length; j++) {
 				if(this.boardPieces[i][j] != null){
 					String numStr = this.boardPieces[i][j].player + ",";
 					fileStr = fileStr + numStr;

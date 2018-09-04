@@ -24,6 +24,7 @@ public class game {
 	public static void play(board myBoard) {
 		int player = 1;
 		boolean hasWon = false;
+		int maxMoves = myBoard.boardDim * myBoard.boardDim;
 		if (myBoard.initializeGameFromLoad()){
 			try{
 				int movesPlayed = loadGame(myBoard);
@@ -35,25 +36,31 @@ public class game {
 			}
 		}
 		while (!hasWon) {
-			myBoard.makeMove(player);
+			myBoard.registerPiece(player);
 			hasWon = checkWin(myBoard);
 			turn ++;
+			
+			if(hasWon) {
+				displayGameOutcome(player);
+				return;
+			}
+			else if ((!hasWon) && turn > maxMoves) {
+				displayGameOutcome(-1);
+			}
 			player = (turn % 3);
 			if (player == 0) {
 				player = 3;
 			}
 		}
-		win(player-1);
 		return; 
 	}
 
-	
-	/**
-	 * 	Loads game from savedgames.txt and parses pieces into boards
-	 * boardPieces array
-	 * @param myBoard board to have pieces read into
-	 * @return returns number of turns played in loaded game
-	 */
+/**
+ * Loads game from savedgames.txt and parses pieces into boards
+ * boardPieces array
+ * @param myBoard board to have pieces read into
+ * @return returns number of turns played in loaded game
+ */
 	public static int loadGame(board myBoard) throws IOException {
 		File file = new File("savedgames.txt");
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -84,6 +91,11 @@ public class game {
 	}
 
 	// FIX: Logic needs to be cleaned. In more modular way, check for NULL then check for win.
+/**
+ * Checks if a player has won.
+ * @param myBoard the instance of the game.
+ * @return true if the game is won, false if not
+ */
 	public static boolean checkWin(board myBoard) {
 		for(int i = 0; i < myBoard.boardPieces.length; i++) {
 			
@@ -136,13 +148,22 @@ public class game {
 	}
 
 	//FIX: for scaling here. Scale is hard coded
-	public static void win(int player){
+/**
+ * Prints the outcome of the game
+ * @param player the player that has won, -1 if the game is a draw.
+ */
+	public static void displayGameOutcome(int player){
 		StdDraw.pause(20);
 		StdDraw.clear();
 		for(int i = 0; i<= 360 ; i = i+15) {
 			StdDraw.clear();
 			StdDraw.setPenColor(genRandomColor());
-			StdDraw.text(.5, .5, "Player " + player + " Wins!", i);
+			if(player == -1) {
+				StdDraw.text(.5, .5, "Draw game, no winner..." , i);
+			}
+			else {
+				StdDraw.text(.5, .5, "Player " + player + " Wins!", i);
+			}
 			StdDraw.show(50);
 		}
 	}
@@ -153,13 +174,5 @@ public class game {
 	public static void main(String[] args) throws IOException {
 		board myBoard = new board(4);
 		play(myBoard);
-		//		myBoard.boardPieces[2][3] = new piece(2);
-		//		myBoard.boardPieces[1][3] = new piece(3);
-		//		myBoard.boardPieces[3][0] = new piece(1);
-		//		saveGame(myBoard);
-		//		loadGame(myBoard);
-		//		System.out.println(myBoard.boardPieces[2][3].player);
-		//		System.out.println(myBoard.boardPieces[1][3].player);
-		//		System.out.println(myBoard.boardPieces[3][0].player);
 	}
 }
