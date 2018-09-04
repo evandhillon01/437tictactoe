@@ -13,18 +13,28 @@ import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 //contains all the win checks / methods 
 
 public class game {
-	
+
 	static int turn = 1;
 	static boolean win;
-	
-/**
- * Plays the game Tic-Tac-Toe
- * @param myBoard the instance of the game
- */
+
+	/**
+	 * Plays the game Tic-Tac-Toe
+	 * @param myBoard the instance of the game
+	 */
 	public static void play(board myBoard) {
-			int player = 1;
+		int player = 1;
+		if (myBoard.initializeGameFromLoad()){
+			try{
+				int movesPlayed = loadGame(myBoard);
+				player = (movesPlayed % 3) +1;
+				turn = movesPlayed+1;
+			}
+			catch(IOException e){
+				System.out.println("Could not load board. Error: "+e);
+			}
+		}
 		while (win == false) {
-			myBoard.addPiece(player);
+			myBoard.makeMove(player);
 			if(!checkWin(myBoard)) {
 				win = checkWin(myBoard);
 			};
@@ -38,54 +48,37 @@ public class game {
 		return; 
 	}
 
-	public static void saveGame(board myBoard) throws IOException {
-		String fileName = "savedgames.txt";
-		String fileStr = "";
-		for(int i = 0; i < myBoard.boardPieces[0].length; i++) {
-			for(int j = 0; j < myBoard.boardPieces.length; j++) {
-				if(myBoard.boardPieces[i][j] != null){
-					String numStr = myBoard.boardPieces[i][j].player + ",";
-					fileStr = fileStr + numStr;
+	
+
+	public static int loadGame(board myBoard) throws IOException {
+		File file = new File("savedgames.txt");
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String line;
+		int count = 0, moves = 0;
+		while ((line = reader.readLine()) != null) {
+			String[] values = line.split(",");
+			for(int i = 0; i < values.length; i++) {
+				if(values[i].equals("x")) {
+					myBoard.boardPieces[count][i] = null;
 				}
-				else {
-					fileStr = fileStr + "x,";
+				else if(values[i].equals("1")) {
+					myBoard.addPiece(count, i, 1);
+					moves++;
+				}
+				else if(values[i].equals("2")) {
+					myBoard.addPiece(count, i, 2);
+					moves++;
+				}
+				else if(values[i].equals("3")) {
+					myBoard.addPiece(count, i, 3);
+					moves++;
 				}
 			}
-			fileStr = fileStr + "\n";
+			count++;
 		}
-		PrintWriter clear = new PrintWriter(fileName);
-		clear.print("");
-		clear.close();
-		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-		writer.write(fileStr);	     
-		writer.close();
+		return moves;
 	}
-	
-	public static void loadGame(board myBoard) throws IOException {
-	    File file = new File("savedgames.txt");
-	    BufferedReader reader = new BufferedReader(new FileReader(file));
-	    String line;
-	    int count = 0;
-	    while ((line = reader.readLine()) != null) {
-	        String[] values = line.split(",");
-	        for(int i = 0; i < values.length; i++) {
-	        	if(values[i].equals("x")) {
-	        		myBoard.boardPieces[count][i] = null;
-	        	}
-	        	else if(values[i].equals("1")) {
-	        		myBoard.boardPieces[count][i] = new piece(1);
-	        	}
-	        	else if(values[i].equals("2")) {
-	        		myBoard.boardPieces[count][i] = new piece(2);
-	        	}
-	        	else if(values[i].equals("3")) {
-	        		myBoard.boardPieces[count][i] = new piece(3);
-	        	}
-	        }
-	        count++;
-	    }
-	}
-	
+
 	// FIX: Logic needs to be cleaned. In more modular way, check for NULL then check for win.
 	public static boolean checkWin(board myBoard) {
 		for(int i = 0; i < myBoard.boardPieces.length; i++) {
@@ -113,7 +106,7 @@ public class game {
 						return true;
 					}
 				}
-				
+
 				//vertical checks
 				if(myBoard.boardPieces[i][0] != null && myBoard.boardPieces[i][1] != null && myBoard.boardPieces[i][2] != null ) { 
 					if(myBoard.boardPieces[i][0].player == myBoard.boardPieces[i][1].player && myBoard.boardPieces[i][1].player == myBoard.boardPieces[i][2].player) {
@@ -144,8 +137,8 @@ public class game {
 		}
 		return false;
 	}
-	
-    //FIX: for scaling here. Scale is hard coded
+
+	//FIX: for scaling here. Scale is hard coded
 	public static void win(int player){
 		StdDraw.clear();
 		for(int i = 0; i<= 360 ; i = i+15) {
@@ -159,13 +152,13 @@ public class game {
 	public static void main(String[] args) throws IOException {
 		board myBoard = new board(4);
 		play(myBoard);
-//		myBoard.boardPieces[2][3] = new piece(2);
-//		myBoard.boardPieces[1][3] = new piece(3);
-//		myBoard.boardPieces[3][0] = new piece(1);
-//		saveGame(myBoard);
-//		loadGame(myBoard);
-//		System.out.println(myBoard.boardPieces[2][3].player);
-//		System.out.println(myBoard.boardPieces[1][3].player);
-//		System.out.println(myBoard.boardPieces[3][0].player);
+		//		myBoard.boardPieces[2][3] = new piece(2);
+		//		myBoard.boardPieces[1][3] = new piece(3);
+		//		myBoard.boardPieces[3][0] = new piece(1);
+		//		saveGame(myBoard);
+		//		loadGame(myBoard);
+		//		System.out.println(myBoard.boardPieces[2][3].player);
+		//		System.out.println(myBoard.boardPieces[1][3].player);
+		//		System.out.println(myBoard.boardPieces[3][0].player);
 	}
 }
