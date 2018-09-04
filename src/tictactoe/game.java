@@ -82,53 +82,60 @@ public class game {
 
 	// FIX: Logic needs to be cleaned. In more modular way, check for NULL then check for win.
 	public static boolean checkWin(board myBoard) {
+		System.out.println("start check");
 		for(int i = 0; i < myBoard.boardPieces.length; i++) {
-			//System.out.println("i = " + i);
-			//System.out.println("i piece =" + myBoard.boardPieces[i]);
-			if(myBoard.boardPieces[i] == null) {
-				continue;
+			
+			//horizontal checks
+			if(myBoard.boardPieces[i][0] != null && myBoard.boardPieces[i][1] != null && myBoard.boardPieces[i][2] != null ) {
+				System.out.println("three in a row on left");
+				if(myBoard.boardPieces[i][0].player == myBoard.boardPieces[i][1].player && myBoard.boardPieces[i][1].player == myBoard.boardPieces[i][2].player) {
+					System.out.println("***three in a row for player " + myBoard.boardPieces[i][1].player);
+					return true;
+				}
+			}
+			if(myBoard.boardPieces[i][1] != null && myBoard.boardPieces[i][2] != null && myBoard.boardPieces[i][3] != null ) { 
+				System.out.println("three in a row on right");
+				if(myBoard.boardPieces[i][1].player == myBoard.boardPieces[i][2].player && myBoard.boardPieces[i][2].player == myBoard.boardPieces[i][3].player) {
+					System.out.println("***three in a row for player " + myBoard.boardPieces[i][1].player);
+					return true;
+				}
+			}
+			
+			//vertical checks
+			if(myBoard.boardPieces[0][i] != null && myBoard.boardPieces[1][i] != null && myBoard.boardPieces[2][i] != null ) { 
+				if(myBoard.boardPieces[0][i].player == myBoard.boardPieces[1][i].player && myBoard.boardPieces[1][i].player == myBoard.boardPieces[2][i].player) {
+					System.out.println("***three vert in a row for player " + myBoard.boardPieces[1][i].player);
+					return true;
+				}
 			}
 
+			if(myBoard.boardPieces[1][i] != null && myBoard.boardPieces[2][i] != null && myBoard.boardPieces[3][i] != null ) { 
+				if(myBoard.boardPieces[1][i].player == myBoard.boardPieces[2][i].player && myBoard.boardPieces[2][i].player == myBoard.boardPieces[3][i].player) {
+					System.out.println("***three vert in a row for player " + myBoard.boardPieces[1][i].player);
+					return true;
+				}
+			}
+			
 			for(int j = 0; j < myBoard.boardPieces[i].length; j++) {
-				//System.out.println("j = " + j);
-				//System.out.println("j piece =" + myBoard.boardPieces[i][j]);
+				System.out.println("i = " + i);
+				System.out.println("j = " + j);
 				if(myBoard.boardPieces[i][j] == null) {
+					System.out.println("null piece");
 					continue;
 				}
-				//horizontal checks
-				if(myBoard.boardPieces[0][j] != null && myBoard.boardPieces[1][j] != null && myBoard.boardPieces[2][j] != null ) { 
-					if(myBoard.boardPieces[0][j].player == myBoard.boardPieces[1][j].player && myBoard.boardPieces[1][j].player == myBoard.boardPieces[2][j].player) {
-						return true;
-					}
-				}
-				if(myBoard.boardPieces[3][j] != null && myBoard.boardPieces[1][j] != null && myBoard.boardPieces[2][j] != null ) { 
-					if(myBoard.boardPieces[1][j].player == myBoard.boardPieces[2][j].player && myBoard.boardPieces[2][j].player == myBoard.boardPieces[3][j].player) {
-						return true;
-					}
-				}
-
-				//vertical checks
-				if(myBoard.boardPieces[i][0] != null && myBoard.boardPieces[i][1] != null && myBoard.boardPieces[i][2] != null ) { 
-					if(myBoard.boardPieces[i][0].player == myBoard.boardPieces[i][1].player && myBoard.boardPieces[i][1].player == myBoard.boardPieces[i][2].player) {
-						return true;
-					}
-				}
-
-				if(myBoard.boardPieces[i][1] != null && myBoard.boardPieces[i][2] != null && myBoard.boardPieces[i][3] != null ) { 
-					if(myBoard.boardPieces[i][1].player == myBoard.boardPieces[i][2].player && myBoard.boardPieces[i][2].player == myBoard.boardPieces[i][3].player) {
-						return true;
-					}
-				}
+				System.out.println("**piece** =" + myBoard.boardPieces[i][j].player);
 				if(i != 0 && i != 3 && j != 0 && j != 3) {
 					//diagonal checks \ direction
-					if(myBoard.boardPieces[i-1][j+1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i+1][j-1] != null) {
-						if(myBoard.boardPieces[i-1][j+1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i+1][j-1].player) {
+					if(myBoard.boardPieces[i+1][j-1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i-1][j+1] != null) {
+						if(myBoard.boardPieces[i+1][j-1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i-1][j+1].player) {
+							System.out.println("3 diagonal right down for player " + myBoard.boardPieces[i][j].player);
 							return true;
 						}
 					}
 					//diagonal checks / direction
-					if(myBoard.boardPieces[i-1][j-1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i+1][j+1] != null) {
-						if(myBoard.boardPieces[i-1][j-1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i+1][j+1].player) {
+					if(myBoard.boardPieces[i+1][j+1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i-1][j-1] != null) {
+						if(myBoard.boardPieces[i+1][j+1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i-1][j-1].player) {
+							System.out.println("3 diagonal right up for player " + myBoard.boardPieces[i][j].player);
 							return true;
 						}
 					}
