@@ -8,6 +8,7 @@ import org.junit.Test;
 
 public class testBoardMethods {
 	board myBoard = new board(4);
+
 	@Test
 	public void testBoxFromCoordinate() {
 		int[] result = myBoard.getBoxFromCoordinate(.5, .5);
