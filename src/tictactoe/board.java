@@ -1,6 +1,10 @@
 package tictactoe;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class board {
 
@@ -15,7 +19,6 @@ public class board {
 		this.boardDim = boardDim;
 		this.boardPieces = new piece[boardDim][boardDim];
 		//need turn count somewhere
-		this.setBoard();
 	}
 
 /**
@@ -26,6 +29,24 @@ public class board {
 		StdDraw.setPenColor(Color.BLACK);
 		StdDraw.setScale(0,1);
 		drawBoard();
+	}
+	
+	public boolean initializeGameFromLoad(){
+		//draw initiliztion screen
+		StdDraw.setPenColor(new Color(255, 0, 0, 127));
+		StdDraw.filledRectangle(.25, .5, .25, .5);
+		StdDraw.setPenColor(new Color(0, 255, 0, 127));
+		StdDraw.filledRectangle(.75, .5, .25, .5);
+		StdDraw.setPenColor(Color.BLACK);
+		StdDraw.text(.5, .8, "Press 'S' key at any point to save the game");
+		StdDraw.text(.25, .5, "New Game");
+		StdDraw.text(.75, .5, "Load Game");
+		//wait for click
+		double[] coor = clickOnBoardOrSave();
+		StdDraw.clear();
+		//clear and return side of click
+		this.setBoard();
+		return coor[0] > .5 ;
 	}
 
 /**
@@ -47,15 +68,11 @@ public class board {
 		}
 	}
 
-/**
- * Adds piece to the board
- * @param player the number of the player
- */
-	void addPiece(int player) {
+	void makeMove(int player) {
 		double x = 0, y = 0;
 		int row ,col;			
-		double[] coor = clickOnBoard();
-
+		double[] coor = clickOnBoardOrSave();
+		
 		// x is stored in the 0-index and y in the 1-index of returned array
 		x = coor[0];
 		y = coor[1];
@@ -63,28 +80,46 @@ public class board {
 		row = coorRowAndCol[0];
 		col = coorRowAndCol[1];
 		
+		addPiece(row,col,player);
+		
+	}
+
+/**
+ * Adds piece to the board
+ * @param player the number of the player
+ */
+	public void addPiece(int row,int col,int player){
 		double centerX = indexToCoordinate(col);
 		double centerY = indexToCoordinate(row);
-		
 		if(isValidMove(row,col)) {
 			piece addedPiece = new piece(player);
 			this.boardPieces[row][col] = addedPiece;
 			addedPiece.draw(centerX, centerY);
 		}
 		else {
-			addPiece(player);
+			makeMove(player);
 		}
 	}
+	
 
 /**
  * Registers mouse click on board
  * @return array of x coordinate @ 0-index 
  * 		   and y coordinate @ 1-index
  */
-	private double[] clickOnBoard() {
+	private double[] clickOnBoardOrSave() {
 		double x = 0, y = 0;
 		double [] coor = new double [2];
 		while (!StdDraw.mousePressed()){
+			if (StdDraw.isKeyPressed(83)){
+				try{
+					this.saveGame();
+					System.out.println("game saved");
+				}
+				catch(IOException e){
+					System.out.println("Could not save game: Error "+e);
+				}
+			}
 			StdDraw.pause(100);
 		}
 		while(StdDraw.mousePressed()){
@@ -111,6 +146,28 @@ public class board {
 
 	private static Color genRandomColor() {
 		return new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+	}
+	private void saveGame() throws IOException {
+		String fileName = "savedgames.txt";
+		String fileStr = "";
+		for(int i = 0; i < this.boardPieces[0].length; i++) {
+			for(int j = 0; j < this.boardPieces.length; j++) {
+				if(this.boardPieces[i][j] != null){
+					String numStr = this.boardPieces[i][j].player + ",";
+					fileStr = fileStr + numStr;
+				}
+				else {
+					fileStr = fileStr + "x,";
+				}
+			}
+			fileStr = fileStr + "\n";
+		}
+		PrintWriter clear = new PrintWriter(fileName);
+		clear.print("");
+		clear.close();
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+		writer.write(fileStr);	     
+		writer.close();
 	}
 
 	// Helper functions

@@ -1,0 +1,7 @@
+test 2
+
+Notes:
+	User didn't like appearance of game
+	didn't know rules
+Actions:
+	made pieces different colors
