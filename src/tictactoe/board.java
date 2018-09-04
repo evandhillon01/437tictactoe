@@ -144,9 +144,6 @@ public class board {
 		return this.boardPieces[row][col] == null;
 	}
 
-	private static Color genRandomColor() {
-		return new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
-	}
 	private void saveGame() throws IOException {
 		String fileName = "savedgames.txt";
 		String fileStr = "";
