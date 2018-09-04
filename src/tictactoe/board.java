@@ -113,6 +113,7 @@ public class board {
 			if (StdDraw.isKeyPressed(83)){
 				try{
 					this.saveGame();
+					System.out.println("game saved");
 				}
 				catch(IOException e){
 					System.out.println("Could not save game: Error "+e);

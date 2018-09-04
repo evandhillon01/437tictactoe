@@ -43,6 +43,7 @@ public class game {
 			if (player == 0) {
 				player = 3;
 			}
+			System.out.println(win);
 		}
 		win(player);
 		return; 
@@ -82,19 +83,18 @@ public class game {
 	// FIX: Logic needs to be cleaned. In more modular way, check for NULL then check for win.
 	public static boolean checkWin(board myBoard) {
 		for(int i = 0; i < myBoard.boardPieces.length; i++) {
-			System.out.println("i = " + i);
-			System.out.println("i piece =" + myBoard.boardPieces[i]);
+			//System.out.println("i = " + i);
+			//System.out.println("i piece =" + myBoard.boardPieces[i]);
 			if(myBoard.boardPieces[i] == null) {
 				continue;
 			}
 
 			for(int j = 0; j < myBoard.boardPieces[i].length; j++) {
-				System.out.println("j = " + j);
-				System.out.println("j piece =" + myBoard.boardPieces[i][j]);
+				//System.out.println("j = " + j);
+				//System.out.println("j piece =" + myBoard.boardPieces[i][j]);
 				if(myBoard.boardPieces[i][j] == null) {
 					continue;
 				}
-
 				//horizontal checks
 				if(myBoard.boardPieces[0][j] != null && myBoard.boardPieces[1][j] != null && myBoard.boardPieces[2][j] != null ) { 
 					if(myBoard.boardPieces[0][j].player == myBoard.boardPieces[1][j].player && myBoard.boardPieces[1][j].player == myBoard.boardPieces[2][j].player) {

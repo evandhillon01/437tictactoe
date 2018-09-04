@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class piece {
 
-	int player;
+	public int player;
 	double radius;
 
 	public piece(int player) {
