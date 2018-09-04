@@ -6,10 +6,11 @@ public class board {
 
 	int boardDim; 
 	piece[][] boardPieces;
-	/**
-	 * Constuctor for board
-	 * @param boardDim n size for nxn board
-	 */
+
+/**
+ * Constuctor for board
+ * @param boardDim n size for nxn board
+ */
 	public board (int boardDim) {
 		this.boardDim = boardDim;
 		this.boardPieces = new piece[boardDim][boardDim];
@@ -46,10 +47,10 @@ public class board {
 		}
 	}
 
-	/**
-	 * Adds piece to the board
-	 * @param player the number of the player
-	 */
+/**
+ * Adds piece to the board
+ * @param player the number of the player
+ */
 	void addPiece(int player) {
 		double x = 0, y = 0;
 		int row ,col;			
@@ -95,12 +96,12 @@ public class board {
 		return coor;
 	}
 
-	/**
-	 * 	Checks if user-input is valid move
-	 * @param row row of user input
-	 * @param col column of user input
-	 * @return boolean true if user input is within bounds or board's box is vacant, false if not.
-	 */
+/**
+ * 	Checks if user-input is valid move
+ * @param row row of user input
+ * @param col column of user input
+ * @return boolean true if user input is within bounds or board's box is vacant, false if not.
+ */
 	private boolean isValidMove(int row, int col){
 		if (col >= this.boardPieces[0].length || row >= this.boardPieces.length) {
 			return false;
@@ -113,22 +114,22 @@ public class board {
 	}
 
 	// Helper functions
-	/**
-	 * Calculates the centered coordinate of an entire row or column.
-	 * @param index the row or column number
-	 * @return the center of the given row or column
-	 */
+/**
+ * Calculates the centered coordinate of an entire row or column.
+ * @param index the row or column number
+ * @return the center of the given row or column
+ */
 	private double indexToCoordinate (int index) {
 		double interval = 1.0 / (2 * this.boardDim);
 		return (interval * (index * 2 + 1));
 	}
-	/**
-	 * 
-	 * @param x x-Coordinate
-	 * @param y y-Coordinate
-	 * @return array with corresponding row and column of coordinates
-	 */
 
+/**
+ * 
+ * @param x x-Coordinate
+ * @param y y-Coordinate
+ * @return array with corresponding row and column of coordinates
+ */
 	private int[] getBoxFromCoordinate(double x, double y){
 		int row = (int) (y / (1.0 / this.boardDim));
 		int col = (int) (x / (1.0 / this.boardDim));
