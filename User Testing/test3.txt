@@ -1,0 +1,4 @@
+Test 3
+
+Notes:
+	Test went smoothly - user figured out game as he went, playing against himself. Not much in terms of constructive criticism but seemed to understand the UI and game itself. played to completion and won as player 2.
