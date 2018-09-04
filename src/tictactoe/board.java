@@ -143,7 +143,10 @@ public class board {
 		}
 		return this.boardPieces[row][col] == null;
 	}
-
+/**
+	 * 	Saves current state of game to savedgames.txt as 
+	 * comma seperated list with x for nulls
+*/
 	private void saveGame() throws IOException {
 		String fileName = "savedgames.txt";
 		String fileStr = "";

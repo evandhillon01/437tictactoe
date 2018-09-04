@@ -48,7 +48,12 @@ public class game {
 	}
 
 	
-
+	/**
+	 * 	Loads game from savedgames.txt and parses pieces into boards
+	 * boardPieces array
+	 * @param myBoard board to have pieces read into
+	 * @return returns number of turns played in loaded game
+	 */
 	public static int loadGame(board myBoard) throws IOException {
 		File file = new File("savedgames.txt");
 		BufferedReader reader = new BufferedReader(new FileReader(file));
