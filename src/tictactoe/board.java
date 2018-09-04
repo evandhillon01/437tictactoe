@@ -88,7 +88,7 @@ public class board {
 	}
 
 /**
- * Adds piece to the board from load game.
+ * Adds piece to the board.
  * @param row row number
  * @param col column number
  * @param player the number of the player
