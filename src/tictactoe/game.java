@@ -1,4 +1,5 @@
 package tictactoe;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,7 +16,6 @@ import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 public class game {
 
 	static int turn = 1;
-	static boolean win;
 
 	/**
 	 * Plays the game Tic-Tac-Toe
@@ -23,6 +23,7 @@ public class game {
 	 */
 	public static void play(board myBoard) {
 		int player = 1;
+		boolean hasWon = false;
 		if (myBoard.initializeGameFromLoad()){
 			try{
 				int movesPlayed = loadGame(myBoard);
@@ -33,19 +34,16 @@ public class game {
 				System.out.println("Could not load board. Error: "+e);
 			}
 		}
-		while (win == false) {
+		while (!hasWon) {
 			myBoard.makeMove(player);
-			if(!checkWin(myBoard)) {
-				win = checkWin(myBoard);
-			};
+			hasWon = checkWin(myBoard);
 			turn ++;
 			player = (turn % 3);
 			if (player == 0) {
 				player = 3;
 			}
-			System.out.println(win);
 		}
-		win(player);
+		win(player-1);
 		return; 
 	}
 
@@ -82,21 +80,16 @@ public class game {
 
 	// FIX: Logic needs to be cleaned. In more modular way, check for NULL then check for win.
 	public static boolean checkWin(board myBoard) {
-		System.out.println("start check");
 		for(int i = 0; i < myBoard.boardPieces.length; i++) {
 			
 			//horizontal checks
 			if(myBoard.boardPieces[i][0] != null && myBoard.boardPieces[i][1] != null && myBoard.boardPieces[i][2] != null ) {
-				System.out.println("three in a row on left");
 				if(myBoard.boardPieces[i][0].player == myBoard.boardPieces[i][1].player && myBoard.boardPieces[i][1].player == myBoard.boardPieces[i][2].player) {
-					System.out.println("***three in a row for player " + myBoard.boardPieces[i][1].player);
 					return true;
 				}
 			}
 			if(myBoard.boardPieces[i][1] != null && myBoard.boardPieces[i][2] != null && myBoard.boardPieces[i][3] != null ) { 
-				System.out.println("three in a row on right");
 				if(myBoard.boardPieces[i][1].player == myBoard.boardPieces[i][2].player && myBoard.boardPieces[i][2].player == myBoard.boardPieces[i][3].player) {
-					System.out.println("***three in a row for player " + myBoard.boardPieces[i][1].player);
 					return true;
 				}
 			}
@@ -104,38 +97,30 @@ public class game {
 			//vertical checks
 			if(myBoard.boardPieces[0][i] != null && myBoard.boardPieces[1][i] != null && myBoard.boardPieces[2][i] != null ) { 
 				if(myBoard.boardPieces[0][i].player == myBoard.boardPieces[1][i].player && myBoard.boardPieces[1][i].player == myBoard.boardPieces[2][i].player) {
-					System.out.println("***three vert in a row for player " + myBoard.boardPieces[1][i].player);
 					return true;
 				}
 			}
 
 			if(myBoard.boardPieces[1][i] != null && myBoard.boardPieces[2][i] != null && myBoard.boardPieces[3][i] != null ) { 
 				if(myBoard.boardPieces[1][i].player == myBoard.boardPieces[2][i].player && myBoard.boardPieces[2][i].player == myBoard.boardPieces[3][i].player) {
-					System.out.println("***three vert in a row for player " + myBoard.boardPieces[1][i].player);
 					return true;
 				}
 			}
 			
 			for(int j = 0; j < myBoard.boardPieces[i].length; j++) {
-				System.out.println("i = " + i);
-				System.out.println("j = " + j);
 				if(myBoard.boardPieces[i][j] == null) {
-					System.out.println("null piece");
 					continue;
 				}
-				System.out.println("**piece** =" + myBoard.boardPieces[i][j].player);
 				if(i != 0 && i != 3 && j != 0 && j != 3) {
 					//diagonal checks \ direction
 					if(myBoard.boardPieces[i+1][j-1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i-1][j+1] != null) {
 						if(myBoard.boardPieces[i+1][j-1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i-1][j+1].player) {
-							System.out.println("3 diagonal right down for player " + myBoard.boardPieces[i][j].player);
 							return true;
 						}
 					}
 					//diagonal checks / direction
 					if(myBoard.boardPieces[i+1][j+1] != null && myBoard.boardPieces[i][j] != null && myBoard.boardPieces[i-1][j-1] != null) {
 						if(myBoard.boardPieces[i+1][j+1].player == myBoard.boardPieces[i][j].player && myBoard.boardPieces[i][j].player == myBoard.boardPieces[i-1][j-1].player) {
-							System.out.println("3 diagonal right up for player " + myBoard.boardPieces[i][j].player);
 							return true;
 						}
 					}
@@ -147,13 +132,17 @@ public class game {
 
 	//FIX: for scaling here. Scale is hard coded
 	public static void win(int player){
+		StdDraw.pause(20);
 		StdDraw.clear();
 		for(int i = 0; i<= 360 ; i = i+15) {
 			StdDraw.clear();
-			//StdDraw.setPenColor(genRandomColor());
-			StdDraw.text(.5, .5, "Player " + player + "Wins!", i);
+			StdDraw.setPenColor(genRandomColor());
+			StdDraw.text(.5, .5, "Player " + player + " Wins!", i);
 			StdDraw.show(50);
 		}
+	}
+	private static Color genRandomColor() {
+		return new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
 	}
 
 	public static void main(String[] args) throws IOException {
