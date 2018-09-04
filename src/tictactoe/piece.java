@@ -39,7 +39,6 @@ public class piece {
 				StdDraw.square(x, y, radius);
 				break;
 		}
-
 		StdDraw.setPenColor(Color.black);
 	}
 }

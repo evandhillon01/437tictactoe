@@ -31,6 +31,11 @@ public class board {
 		drawBoard();
 	}
 	
+/**
+ * Draws starting screen.
+ * @return true for click on load game, 
+ * 		false for click on new game.
+ */
 	public boolean initializeGameFromLoad(){
 		//draw initiliztion screen
 		StdDraw.setPenColor(new Color(255, 0, 0, 127));
@@ -153,9 +158,10 @@ public class board {
 		}
 		return this.boardPieces[row][col] == null;
 	}
+
 /**
 	 * 	Saves current state of game to savedgames.txt as 
-	 * comma seperated list with x for nulls
+	 * comma separated list with x for nulls
 */
 	private void saveGame() throws IOException {
 		String fileName = "savedgames.txt";

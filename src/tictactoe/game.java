@@ -167,6 +167,11 @@ public class game {
 			StdDraw.show(50);
 		}
 	}
+	
+/**
+ * Generates random color for 'game outcome' display text.
+ * @return
+ */
 	private static Color genRandomColor() {
 		return new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
 	}
