@@ -90,7 +90,6 @@ public class game {
 		return moves;
 	}
 
-	// FIX: Logic needs to be cleaned. In more modular way, check for NULL then check for win.
 /**
  * Checks if a player has won.
  * @param myBoard the instance of the game.
@@ -147,7 +146,6 @@ public class game {
 		return false;
 	}
 
-	//FIX: for scaling here. Scale is hard coded
 /**
  * Prints the outcome of the game
  * @param player the player that has won, -1 if the game is a draw.

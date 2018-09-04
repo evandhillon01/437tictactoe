@@ -192,7 +192,8 @@ public class board {
  * @param index the row or column number
  * @return the center of the given row or column
  */
-	private double indexToCoordinate (int index) {
+	protected double indexToCoordinate (int index) {
+		if(index >= this.boardDim) return -1;
 		double interval = 1.0 / (2 * this.boardDim);
 		return (interval * (index * 2 + 1));
 	}
@@ -203,7 +204,8 @@ public class board {
  * @param y y-Coordinate
  * @return array with corresponding row and column of coordinates
  */
-	private int[] getBoxFromCoordinate(double x, double y){
+	protected int[] getBoxFromCoordinate(double x, double y){
+		if (x < 0 || y < 0 || x > 1 || y> 1) return null;
 		int row = (int) (y / (1.0 / this.boardDim));
 		int col = (int) (x / (1.0 / this.boardDim));
 		return new int[] {row,col};
